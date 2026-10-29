@@ -1,0 +1,61 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import PostCard from '../components/PostCard.astro';
+import { getPosts, getSettings, getStats } from '../lib/db';
+import { categories, categoryIcons, compactNumber, dateLabel } from '../lib/display';
+const db = Astro.locals.env.DB;
+const rawCategory = Astro.url.searchParams.get('category') || '';
+const category = categories.some(item => item === rawCategory) ? rawCategory : '';
+const q = (Astro.url.searchParams.get('q') || '').replaceAll('\0', '').slice(0, 200);
+const tag = (Astro.url.searchParams.get('tag') || '').replaceAll('\0', '').slice(0, 40);
+const sort = Astro.url.searchParams.get('sort') === 'oldest' ? 'oldest' : 'newest';
+const rawPage = Number(Astro.url.searchParams.get('page'));
+const page = Number.isSafeInteger(rawPage) && rawPage > 0 && rawPage <= 1_000_000 ? rawPage : 1;
+const [result, settings, stats, offerCount] = await Promise.all([
+  getPosts(db, { category, q, tag, sort, page, limit: 8 }), getSettings(db), getStats(db),
+  db.prepare("SELECT COUNT(*) AS total FROM posts WHERE category = 'Offers' AND status IN ('published', 'scheduled') AND published_at <= ? AND (offer_start IS NULL OR offer_start <= ?) AND (offer_end IS NULL OR offer_end > ?)").bind(...Array(3).fill(new Date().toISOString())).first<{ total: number }>(),
+]);
+const filtered = Boolean(category || q || tag);
+const pageLink = (n: number) => { const params = new URLSearchParams(Astro.url.searchParams); params.set('page', String(n)); return `/?${params}`; };
+---
+<Layout title={`${settings.site_name} — ${settings.tagline}`} description={settings.description}>
+  <div class="app-shell">
+    <aside class="left-sidebar" aria-label="Browse the wall">
+      <div class="sidebar-section-label">YOUR DAILY DETOUR</div>
+      <nav class="category-nav" aria-label="Post categories">
+        <a href="/" class:list={{ selected: !category && !q && !tag }}><Icon name="grid" size={18}/><span>Everything</span><span class="nav-count">{stats.posts}</span></a>
+        {categories.map(item => <a href={`/?category=${encodeURIComponent(item)}`} class:list={{ selected: category === item }}><Icon name={categoryIcons[item]} size={18}/><span>{item}</span><span class="nav-count">{stats.categories.find(c => c.category === item)?.count || 0}</span></a>)}
+      </nav>
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-section-label">KEEP IN THE LOOP</div>
+      <nav class="secondary-nav" aria-label="More"><a href="/rss.xml"><Icon name="rss" size={17}/>RSS feed<Icon name="external" size={12}/></a><a href="/about"><Icon name="thought" size={17}/>Behind the wall<Icon name="external" size={12}/></a></nav>
+      <div class="sidebar-note"><span class="tiny-spark"><Icon name="spark" size={30}/></span><p>Good things are<br/>better shared.</p><span>A little corner, by {settings.author_name}.</span></div>
+      <div class="sidebar-bottom"><span class="status-dot"></span> OPEN TO THE CURIOUS</div>
+    </aside>
+    <main id="main" class="wall-main">
+      <section class="wall-hero">
+        <div class="hero-copy"><div class="eyebrow"><span class="status-dot"></span> ONE PERSON. MANY INTERESTS.</div><h1>A little curiosity.<br/>A lot <span>worth sharing.</span></h1><p>{settings.tagline || 'AI rabbit holes, apps I love, games worth playing, and good finds. All on one little wall.'}</p><div class="hero-signoff"><span class="mini-avatar">{settings.author_name.slice(0, 1).toUpperCase()}</span><span>Collected by <strong>{settings.author_name}</strong></span><span class="signoff-dot">·</span><span>Shared with everyone</span></div></div>
+        <div class="hero-art" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><span class="orbit-dot dot-one"></span><span class="orbit-dot dot-two"></span><div class="hero-sticker sticker-code"><Icon name="code" size={23}/><span>explore.</span></div><div class="hero-sticker sticker-idea"><Icon name="spark" size={20}/><span>find something good.</span></div><div class="hero-asterisk"><svg viewBox="0 0 140 140" width="140" height="140">{Array.from({ length: 8 }, (_, i) => <rect x="59" y="4" width="22" height="65" rx="7" fill="currentColor" transform={`rotate(${i * 45} 70 70)`}/>)}</svg></div><span class="art-caption">always a work in curiosity</span></div>
+      </section>
+      {result.posts.some(post => post.tags.includes('sample')) && <div class="sample-notice"><Icon name="spark" size={14}/><span>A wall in the making. <span>These are sample posts.</span></span><a href="/studio">Make it yours<Icon name="arrow" size={13}/></a></div>}
+      <div class="content-columns">
+        <section class="feed-section" aria-labelledby="feed-title">
+          <div class="feed-toolbar"><div><h2 id="feed-title">{q ? `Results for “${q}”` : tag ? `Posts tagged #${tag}` : category || 'Fresh on the wall'}<span>{result.total}</span></h2><p>{filtered ? 'A little more of what you’re looking for.' : 'New discoveries. Honest thoughts. The occasional good deal.'}</p></div><div class="feed-controls"><form action="/" method="get" id="sort-form">{category && <input type="hidden" name="category" value={category}/>} {q && <input type="hidden" name="q" value={q}/>} {tag && <input type="hidden" name="tag" value={tag}/>}<label class="sr-only" for="sort">Sort posts</label><select id="sort" name="sort" aria-label="Sort posts"><option value="newest" selected={sort === 'newest'}>Newest first</option><option value="oldest" selected={sort === 'oldest'}>Oldest first</option></select><noscript><button type="submit">Sort</button></noscript></form><span class="view-divider"></span><button class="view-button active" data-view="grid" aria-label="Grid view" aria-pressed="true"><Icon name="grid" size={15}/></button><button class="view-button" data-view="list" aria-label="List view" aria-pressed="false"><Icon name="list" size={17}/></button></div></div>
+          {filtered && <div class="filter-bar"><span>{q ? 'Search' : tag ? 'Topic' : 'Category'}: <strong>{q || tag || category}</strong></span><a href="/">Clear filter <Icon name="close" size={13}/></a></div>}
+          <div class="post-grid" id="post-grid">{result.posts.map((post, index) => <PostCard post={post} featured={!filtered && page === 1 && index === 0 && post.pinned}/>)}</div>
+          {result.posts.length === 0 && <div class="empty-state"><span class="empty-icon"><Icon name="search" size={28}/></span><h3>{filtered ? 'Nothing here just yet.' : 'Every wall starts with one post.'}</h3><p>{filtered ? 'Try another topic or a shorter search. There’s more on the rest of the wall.' : 'The next good discovery belongs here. Add your first post in Studio.'}</p><a class="button primary" href={filtered ? '/' : '/studio'}>{filtered ? 'Explore everything' : 'Write your first post'}<Icon name="arrow" size={16}/></a></div>}
+          {result.pages > 1 && <nav class="pagination" aria-label="Pagination">{page > 1 ? <a class="button subtle" href={pageLink(page - 1)}><Icon name="back" size={16}/>Previous</a> : <span></span>}<span>Page {page} of {result.pages}</span>{page < result.pages ? <a class="button subtle" href={pageLink(page + 1)}>Next<Icon name="arrow" size={16}/></a> : <span></span>}</nav>}
+          {result.posts.length > 0 && page === result.pages && <div class="feed-end"><span></span><Icon name="spark" size={16}/><p>You’re all caught up. Stay curious.</p><span></span></div>}
+        </section>
+        <aside class="right-sidebar" aria-label="About and wall stats">
+          <section class="about-card"><div class="about-card-top"><div class="avatar">R<span class="avatar-dot"></span></div><span class="handwritten">the person<br/>behind the posts <svg width="38" height="23" viewBox="0 0 38 23"><path d="M35 2C29 20 11 20 3 12m0 0 2 9m-2-9 10 1" fill="none" stroke="currentColor" stroke-width="1.2"/></svg></span></div><h2>Hey, I’m {settings.author_name}<span class="brand-dot">.</span></h2><p>{settings.author_bio}</p><a class="text-link" href="/about">A bit more about me <Icon name="arrow" size={15}/></a><div class="about-card-footer"><span class="status-dot"></span>A human-curated corner of the web</div></section>
+          <section class="stats-card"><div class="aside-heading"><Icon name="grid" size={15}/><h2>The wall, in numbers</h2><span class="live-dot"></span></div><div class="stats-grid"><div><strong>{compactNumber(stats.posts)}</strong><span>Posts shared</span></div><div><strong data-visits>{compactNumber(stats.visits)}</strong><span>Page visits</span></div></div><dl><div><dt><Icon name="calendar" size={13}/>Started</dt><dd>{dateLabel(stats.started_at)}</dd></div><div><dt><Icon name="clock" size={13}/>Last updated</dt><dd>{dateLabel(stats.last_updated)}</dd></div></dl><p class="stats-footnote">Small wall. Growing collection.</p></section>
+          <section class="offer-callout"><span class="offer-callout-icon"><Icon name="tag" size={19}/></span><span class="offer-count">{offerCount?.total || 0} ACTIVE</span><h2>A good find feels<br/>better when it’s shared.</h2><p>Offers, invites, and little perks.<br/>Before they’re gone.</p><a href="/?category=Offers">Browse the good finds <Icon name="arrow" size={15}/></a></section>
+          <section class="rss-card"><Icon name="rss" size={18}/><div><h2>Your feed. Your rules.</h2><p>Follow along in your favorite RSS reader. No inbox clutter.</p><a href="/rss.xml">Grab the RSS feed <Icon name="external" size={12}/></a></div></section>
+          <div class="wall-note"><Icon name="lock" size={12}/><span>No sign-ups. No tracking cookies.<br/>Just things worth sharing.</span></div>
+        </aside>
+      </div>
+    </main>
+  </div>
+</Layout>

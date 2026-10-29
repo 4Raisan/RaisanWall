@@ -1,0 +1,51 @@
+---
+import '@fontsource-variable/manrope';
+import '@fontsource-variable/dm-sans';
+import '@fontsource/ibm-plex-mono/400.css';
+import '../styles/global.css';
+import Icon from '../components/Icon.astro';
+interface Props { title?: string; description?: string; image?: string | null; studio?: boolean; }
+const { title = 'RaisanWall — A little curiosity. A lot worth sharing.', description = 'A personal wall of AI discoveries, useful apps, games, good finds, and thoughts along the way. By Raisan.', image, studio = false } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.url.origin).href;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#7454db" />
+    <meta name="description" content={description} />
+    {studio && <meta name="robots" content="noindex, nofollow" />}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="canonical" href={canonical} />
+    <link rel="alternate" type="application/rss+xml" title="RaisanWall RSS" href="/rss.xml" />
+    <meta property="og:title" content={title} /><meta property="og:description" content={description} />
+    <meta property="og:type" content={Astro.url.pathname.startsWith('/post/') ? 'article' : 'website'} />
+    <meta property="og:url" content={canonical} />
+    {image && <meta property="og:image" content={new URL(image, Astro.url.origin).href} />}
+    <title>{title}</title>
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="/" aria-label="RaisanWall home"><span class="brand-mark"><span></span><span></span><span></span></span><span>Raisan<span class="brand-light">Wall</span><span class="brand-dot">.</span></span></a>
+        <nav class="header-nav" aria-label="Main navigation"><a href="/" class:list={{ active: Astro.url.pathname === '/' }}>The wall</a><a href="/about" class:list={{ active: Astro.url.pathname === '/about' }}>About</a></nav>
+        <div class="header-actions">
+          <button class="search-trigger" data-open-search aria-label="Search the wall"><Icon name="search" size={17}/><span>Search anything</span><kbd>/</kbd></button>
+          <a class="icon-button rss-header" href="/rss.xml" aria-label="Subscribe via RSS"><Icon name="rss" size={18}/></a>
+          <a class="studio-link" href="/studio"><Icon name="edit" size={15}/><span>Studio</span></a>
+        </div>
+      </div>
+    </header>
+    <slot />
+    <footer class="site-footer"><a class="footer-brand" href="/">RaisanWall<span>.</span></a><p>A personal corner of a very big internet.</p><div><a href="/rss.xml">RSS feed <Icon name="rss" size={12}/></a><a href="/about">About this wall</a><span>No accounts. Just curiosity.</span></div></footer>
+    <dialog id="search-dialog" class="search-dialog">
+      <div class="dialog-title"><h2>Find something on the wall</h2><button class="icon-button" data-close-search aria-label="Close search"><Icon name="close"/></button></div>
+      <form action="/" method="get"><label for="global-search" class="sr-only">Search posts</label><div class="search-field"><Icon name="search"/><input id="global-search" name="q" type="search" placeholder="Ideas, apps, games, and good finds…" maxlength="200" autocomplete="off"/><button class="button primary" type="submit">Search <Icon name="arrow" size={16}/></button></div></form>
+      <p>Search titles, topics, and the words in between.</p>
+    </dialog>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="../scripts/public.ts"></script>
+  </body>
+</html>

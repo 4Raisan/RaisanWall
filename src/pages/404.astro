@@ -1,0 +1,6 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+Astro.response.status = 404;
+---
+<Layout title="Nothing on this part of the wall — RaisanWall"><main id="main" class="empty-state not-found"><span class="error-number">404</span><h1>This bit of the wall is empty.</h1><p>The post may have moved, or it isn’t public yet.<br/>There are still good things to find back on the wall.</p><a class="button primary" href="/">Back to the wall<Icon name="arrow" size={17}/></a></main></Layout>

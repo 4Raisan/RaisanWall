@@ -1,0 +1,19 @@
+---
+import Icon from './Icon.astro';
+import type { Post } from '../lib/types';
+import { categoryClass, categoryIcons, dateLabel, relativeDate, offerState } from '../lib/display';
+interface Props { post: Post; featured?: boolean; }
+const { post, featured = false } = Astro.props;
+const offer = post.category === 'Offers' ? offerState(post.offer_start, post.offer_end) : null;
+---
+<article class:list={['post-card', { featured, 'text-card': !post.cover_image }]}>
+  {post.cover_image && <a class="card-image" href={`/post/${post.slug}`} tabindex="-1" aria-hidden="true"><img src={post.cover_image} alt="" width="680" height="400" loading={featured ? 'eager' : 'lazy'} decoding="async"/>{featured && <span class="image-label"><Icon name="pin" size={12}/> PINNED NOTE</span>}</a>}
+  <div class="card-content">
+    <div class="card-meta"><a href={`/?category=${encodeURIComponent(post.category)}`} class={`category-label ${categoryClass(post.category)}`}><Icon name={categoryIcons[post.category]} size={13}/>{post.category}</a><span class="meta-date">{relativeDate(post.published_at)}</span></div>
+    <h2><a href={`/post/${post.slug}`}>{post.title}</a></h2>
+    <p class="card-excerpt">{post.excerpt}</p>
+    {offer && <div class="offer-meta"><span class:list={['offer-status', offer.toLowerCase()]}><i></i>{offer}</span>{post.offer_end && <span>{offer === 'Expired' ? 'Ended' : 'Ends'} {dateLabel(post.offer_end)}</span>}</div>}
+    {post.invite_code && offer !== 'Expired' && <button class="code-copy" data-copy={post.invite_code}><span><Icon name="tag" size={13}/><code>{post.invite_code}</code></span><span>Copy <Icon name="copy" size={13}/></span></button>}
+    <div class="card-bottom"><div class="card-tags">{post.tags.slice(0, 2).map(tag => <a href={`/?tag=${encodeURIComponent(tag)}`}>#{tag}</a>)}</div><a class="card-read" href={`/post/${post.slug}`} aria-label={`Read ${post.title}`}><Icon name="arrow" size={17}/></a></div>
+  </div>
+</article>

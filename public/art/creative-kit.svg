@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540" role="img" aria-labelledby="title desc">
+  <title id="title">A good find for the creative toolkit</title>
+  <desc id="desc">Mint-green editorial still life of overlapping paper cards, a sculptural lime asterisk, a cobalt-blue ring, a dimensional plum arch, color swatches, and an orange ticket reading A GOOD FIND.</desc>
+  <defs>
+    <linearGradient id="paper" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fffef5"/><stop offset="1" stop-color="#f1f0dc"/></linearGradient>
+    <linearGradient id="lime" x1="0" y1="0" x2=".8" y2="1"><stop stop-color="#e5ee99"/><stop offset=".55" stop-color="#d1e477"/><stop offset="1" stop-color="#bad252"/></linearGradient>
+    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#6285eb"/><stop offset=".45" stop-color="#4067d9"/><stop offset="1" stop-color="#3250b8"/></linearGradient>
+    <linearGradient id="plum" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#916f8c"/><stop offset="1" stop-color="#654b67"/></linearGradient>
+    <filter id="paper-shadow" x="-35%" y="-35%" width="180%" height="190%"><feDropShadow dx="1" dy="13" stdDeviation="12" flood-color="#3d6558" flood-opacity=".15"/><feDropShadow dx="0" dy="1" stdDeviation="1" flood-color="#3d6558" flood-opacity=".08"/></filter>
+    <filter id="object-shadow" x="-40%" y="-40%" width="200%" height="210%"><feDropShadow dx="4" dy="15" stdDeviation="10" flood-color="#304b40" flood-opacity=".19"/></filter>
+    <path id="asterisk" d="M-15-92H15L20-46 56-75 77-54 45-17 92-14V14L46 20 75 56 54 77 17 45 14 92H-14L-20 46-56 75-77 54-45 17-92 14V-14L-46-20-75-56-54-77-17-45Z"/>
+    <path id="ring" fill-rule="evenodd" d="M-89 0A89 67 0 1 0 89 0A89 67 0 1 0-89 0ZM-43 0A43 32 0 1 1 43 0A43 32 0 1 1-43 0Z"/>
+  </defs>
+  <path d="M0 0H960V540H0Z" fill="#dcefe8"/>
+  <path d="M0 410C168 445 266 350 448 416S762 489 960 374V540H0Z" fill="#eaf5e9"/>
+  <circle cx="830" cy="95" r="181" fill="#cfe5db" opacity=".5"/>
+  <g fill="none" stroke="#a6c3b2" stroke-width="1.5"><path d="M91 332C62 225 157 129 269 146"/><path d="m258 138 12 8-13 7"/><path d="M755 317C839 358 817 426 739 454"/></g>
+  <g transform="rotate(13 622 239)" filter="url(#paper-shadow)">
+    <rect x="499" y="106" width="245" height="284" rx="7" fill="#c79d91"/>
+    <rect x="499" y="100" width="245" height="284" rx="7" fill="#e9b5a5"/>
+    <rect x="516" y="117" width="211" height="250" rx="2" fill="none" stroke="#f7d8c6" stroke-width="1.5"/>
+    <path d="M537 341V262C537 165 708 165 708 262V341M553 341V262C553 186 692 186 692 262V341M569 341V262C569 207 676 207 676 262V341M585 341V262C585 228 660 228 660 262V341" fill="none" stroke="#f8ddca" stroke-width="3"/>
+    <circle cx="622" cy="145" r="5" fill="#bf8479"/>
+  </g>
+  <g transform="rotate(-9 381 253)" filter="url(#paper-shadow)">
+    <rect x="250" y="85" width="270" height="338" rx="7" fill="#c8cdb4"/>
+    <rect x="250" y="80" width="270" height="338" rx="7" fill="url(#paper)"/>
+    <path d="M271 119H500M271 370H500" stroke="#d9ddc7" stroke-width="1.5"/>
+    <circle cx="277" cy="102" r="4" fill="#a6b493"/>
+    <g fill="#bdc7a9"><rect x="290" y="99" width="35" height="5" rx="2.5"/><rect x="465" y="97" width="8" height="8" rx="1"/><rect x="478" y="97" width="8" height="8" rx="1"/><rect x="491" y="97" width="8" height="8" rx="1"/></g>
+    <path d="M276 146V133H289M481 133H494V146M276 335V348H289M481 348H494V335" fill="none" stroke="#c2ccb0" stroke-width="1.5"/>
+    <circle cx="385" cy="241" r="105" fill="none" stroke="#dce1c9" stroke-dasharray="3 6"/>
+    <path d="M385 131V351M275 241H495" stroke="#e3e6d2"/>
+    <g transform="translate(383 235) rotate(10)" filter="url(#object-shadow)">
+      <use href="#asterisk" transform="translate(7 12)" fill="#91a748"/>
+      <use href="#asterisk" fill="url(#lime)" stroke="#e5ee9c" stroke-width="1" stroke-linejoin="round"/>
+      <ellipse cx="2" cy="2" rx="23" ry="23" fill="#8eaa48"/>
+      <ellipse cx="4" cy="8" rx="18" ry="17" fill="#f5f3df"/>
+      <path d="M-15-91H14M-74-55-55-74M-91 13V-13" fill="none" stroke="#f2f6be" stroke-width="2" stroke-linecap="round" opacity=".8"/>
+    </g>
+    <g fill="#788369"><rect x="276" y="384" width="63" height="7" rx="3.5"/><rect x="276" y="396" width="39" height="4" rx="2"/></g>
+    <g fill="#c7d497"><circle cx="468" cy="388" r="8"/><circle cx="487" cy="388" r="8" fill="#596fad"/></g>
+  </g>
+  <g transform="rotate(7 649 245)" filter="url(#paper-shadow)">
+    <rect x="556" y="171" width="184" height="177" rx="5" fill="#c5c7b5"/>
+    <rect x="556" y="166" width="184" height="177" rx="5" fill="#f9f6e9"/>
+    <path d="M572 183H585M572 183V196M724 183H711M724 183V196M572 327H585M572 327V314M724 327H711M724 327V314" fill="none" stroke="#d0d4bf" stroke-width="1.5"/>
+    <g transform="translate(585 206)">
+      <path d="M13 104V51C13-11 126-11 126 51V104H93V52C93 23 48 23 48 52V104Z" fill="#493c54"/>
+      <path d="M0 94V41C0-21 113-21 113 41V94H80V42C80 13 35 13 35 42V94Z" fill="url(#plum)"/>
+      <path d="M113 94 126 104H93L80 94ZM35 94 48 104H13L0 94Z" fill="#57415c"/>
+      <path d="M5 36C5-14 99-19 108 31" fill="none" stroke="#b099a7" stroke-width="2"/>
+      <path d="M35 94V42C35 28 44 20 57 20" fill="none" stroke="#4f3f55" stroke-width="2"/>
+    </g>
+  </g>
+  <g transform="translate(566 364) rotate(-19)" filter="url(#object-shadow)">
+    <use href="#ring" transform="translate(0 18)" fill="#2d469f"/>
+    <use href="#ring" fill="url(#blue)"/>
+    <path d="M-77-19C-64-53-10-64 35-51" fill="none" stroke="#8fa8f1" stroke-width="2" stroke-linecap="round"/>
+    <path d="M-43 0C-43-18-24-32 0-32S43-18 43 0" fill="none" stroke="#2847a6" stroke-width="3"/>
+  </g>
+  <g transform="translate(748 100) rotate(8)" filter="url(#paper-shadow)">
+    <path d="M0 26 42 4 84 26 42 48Z" fill="#7894e4"/>
+    <path d="M0 26 42 48V96L0 74Z" fill="#4c71d0"/>
+    <path d="M42 48 84 26V74L42 96Z" fill="#354fa5"/>
+    <path d="M42 5V47M1 26 42 47 83 26" fill="none" stroke="#a4b8ee" stroke-width="1.5" opacity=".6"/>
+  </g>
+  <g transform="rotate(12 171 229)" filter="url(#paper-shadow)">
+    <rect x="125" y="156" width="90" height="148" rx="7" fill="#c3c9b6"/>
+    <rect x="125" y="151" width="90" height="148" rx="7" fill="#fff9ed"/>
+    <rect x="136" y="163" width="68" height="31" rx="2" fill="#cfdf78"/>
+    <rect x="136" y="199" width="68" height="31" rx="2" fill="#5777d3"/>
+    <rect x="136" y="235" width="68" height="31" rx="2" fill="#80617c"/>
+    <circle cx="170" cy="283" r="4" fill="#dcefe8" stroke="#bac3ad"/>
+  </g>
+  <g transform="translate(674 432) rotate(-7)" filter="url(#paper-shadow)">
+    <path d="M-127-32H127V-12C111-12 111 12 127 12V32H-127V12C-111 12-111-12-127-12Z" fill="#d8955a" transform="translate(0 4)"/>
+    <path d="M-127-32H127V-12C111-12 111 12 127 12V32H-127V12C-111 12-111-12-127-12Z" fill="#f2b173"/>
+    <path d="M-97-24V24M97-24V24" stroke="#b47448" stroke-width="1.5" stroke-dasharray="3 4"/>
+    <path d="M-83-22H83M-83 22H83" stroke="#f9d09a" stroke-width="1.5"/>
+    <text x="0" y="8" text-anchor="middle" fill="#63402e" font-family="'Courier New', monospace" font-size="23" font-weight="700" letter-spacing=".2">A GOOD FIND</text>
+  </g>
+  <g transform="translate(244 390) rotate(30)" filter="url(#paper-shadow)">
+    <rect x="-7" y="-45" width="14" height="109" rx="5" fill="#6a5269"/>
+    <path d="M-7 58H7L4 76 0 85-4 76Z" fill="#b7c3ae"/>
+    <path d="m-2 80 2 5 2-5Z" fill="#594c55"/>
+    <rect x="-7" y="-45" width="14" height="22" rx="4" fill="#988296"/>
+    <path d="M-2-18V51" stroke="#a38ba0" stroke-width="2"/>
+  </g>
+  <g fill="#a2bb90"><circle cx="118" cy="389" r="5"/><circle cx="819" cy="286" r="4"/></g>
+  <path d="M351 455V469M344 462H358" stroke="#9fb68e" stroke-width="2" stroke-linecap="round"/>
+</svg>

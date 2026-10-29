@@ -1,0 +1,17 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import { getSettings } from '../lib/db';
+import { dateLabel } from '../lib/display';
+const settings = await getSettings(Astro.locals.env.DB);
+---
+<Layout title={`Behind the wall — ${settings.site_name}`}>
+  <main id="main" class="about-page article-shell">
+    <a class="back-link" href="/"><Icon name="back" size={16}/>Back to the wall</a>
+    <div class="eyebrow">A SMALL INTRODUCTION</div><h1>A personal corner.<br/><span>A curious mind.</span></h1>
+    <div class="about-intro"><div class="avatar large-avatar">R</div><div><h2>Hey, I’m {settings.author_name}.</h2><p>{settings.author_bio}</p></div></div>
+    <div class="prose"><h2>Why a wall?</h2><p>The internet moves quickly. Useful tools disappear into open tabs. An interesting thought gets lost in a chat. A good game gets added to a list you never look at again.</p><p>This is a place to keep those things, and share them. AI experiments, apps, games, offers, and whatever else sparks a little curiosity.</p><h2>What you can expect</h2><p>Short notes when a link says enough. Longer posts when an idea deserves room. Offers with clear dates, and invite codes you can copy without jumping through hoops.</p><p>Posts may be prepared with help from an AI agent. This remains a personal wall, not an automated news service. Always check original sources and offer terms.</p><h2>Just browsing? You’re in the right place.</h2><p>No account required. No subscription pop-ups. You can follow the <a href="/rss.xml">RSS feed</a> in your own reader.</p><h2>A note on privacy</h2><p>This wall counts page visits, not unique people. It does not set analytics cookies or store raw IP addresses. Short-lived, hashed request identifiers limit repeated counting and protect the publishing login. Your browser only receives a session cookie if you sign in to the private Studio.</p><p>Uploaded images live with the site. External images and links may connect to other services, which have their own privacy policies.</p></div>
+    <div class="about-links">{settings.github_url && <a class="button subtle" href={settings.github_url} target="_blank" rel="noopener noreferrer"><Icon name="code" size={17}/>Find me on GitHub<Icon name="external" size={14}/></a>}{settings.contact_url && <a class="button primary" href={settings.contact_url} target="_blank" rel="noopener noreferrer">Say hello<Icon name="arrow" size={16}/></a>}</div>
+    <p class="about-since">Collecting good things since {dateLabel(settings.launch_date, true)}.</p>
+  </main>
+</Layout>

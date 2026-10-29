@@ -1,0 +1,32 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Icon from '../../components/Icon.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getPostBySlug, getSettings, getPosts } from '../../lib/db';
+import { renderContent } from '../../lib/content';
+import { dateLabel, categoryClass, categoryIcons, offerState } from '../../lib/display';
+const db = Astro.locals.env.DB;
+const post = await getPostBySlug(db, Astro.params.slug || '');
+if (!post) return Astro.rewrite('/404');
+const [settings, related] = await Promise.all([getSettings(db), getPosts(db, { category: post.category, limit: 4 })]);
+const html = renderContent(post.body, post.format);
+const state = offerState(post.offer_start, post.offer_end);
+const readingTime = Math.max(1, Math.ceil(post.body.split(/\s+/).length / 220));
+---
+<Layout title={`${post.title} — ${settings.site_name}`} description={post.excerpt} image={post.cover_image}>
+  <main id="main" class="article-shell">
+    <a href="/" class="back-link"><Icon name="back" size={16}/>Back to the wall</a>
+    <article>
+      <div class="article-meta"><a href={`/?category=${encodeURIComponent(post.category)}`} class={`category-label ${categoryClass(post.category)}`}><Icon name={categoryIcons[post.category]} size={14}/>{post.category}</a>{post.pinned && <span class="pinned-label"><Icon name="pin" size={13}/>Pinned note</span>}</div>
+      <h1 class="article-title">{post.title}</h1><p class="article-excerpt">{post.excerpt}</p>
+      <div class="article-byline"><span class="mini-avatar">{settings.author_name.slice(0, 1).toUpperCase()}</span><div><strong>{settings.author_name}</strong><span>{dateLabel(post.published_at, true)}<span class="signoff-dot">·</span>{readingTime} min read</span></div><button class="button subtle share-button" data-share><Icon name="external" size={15}/>Share post</button></div>
+      {post.cover_image && <img class="article-cover" src={post.cover_image} alt={`Cover for ${post.title}`} width="960" height="550"/>}
+      {post.category === 'Offers' && <section class="article-offer"><div><span class:list={['offer-status', state.toLowerCase()]}><i></i>{state} offer</span><div class="offer-dates">{post.offer_start && <span>Starts {dateLabel(post.offer_start, true)}</span>}{post.offer_end && <span>Ends {dateLabel(post.offer_end, true)}</span>}</div><small>Dates shown in UTC. Check the provider’s terms before claiming.</small></div>{post.invite_code && state !== 'Expired' && <button class="code-copy" data-copy={post.invite_code}><code>{post.invite_code}</code><span>Copy code<Icon name="copy" size={14}/></span></button>}</section>}
+      <div class="prose" set:html={html}></div>
+      {post.link_url && <div class="article-link-box"><div><Icon name="external" size={23}/><span><strong>{post.link_label || 'Explore the link'}</strong><small>{new URL(post.link_url).hostname}</small></span></div><a class="button primary" href={post.link_url} target="_blank" rel="noopener noreferrer">{post.link_label || 'Visit website'}<Icon name="external" size={15}/></a></div>}
+      {post.invite_code && post.category !== 'Offers' && <button class="code-copy standalone-code" data-copy={post.invite_code}><span>Invite code <code>{post.invite_code}</code></span><span>Copy<Icon name="copy" size={14}/></span></button>}
+      <div class="article-end"><div class="card-tags">{post.tags.map(tag => <a href={`/?tag=${encodeURIComponent(tag)}`}>#{tag}</a>)}</div><span>Updated {dateLabel(post.updated_at, true)}</span></div>
+    </article>
+    {related.posts.filter(p => p.id !== post.id).length > 0 && <section class="related-section"><h2>A little more to explore</h2><div class="post-grid">{related.posts.filter(p => p.id !== post.id).slice(0, 2).map(item => <PostCard post={item}/>)}</div></section>}
+  </main>
+</Layout>
